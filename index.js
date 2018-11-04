@@ -10,6 +10,7 @@ logger.token('requestData', function(request, response) {return JSON.stringify(r
 app.use(logger(':method :url :status :requestData'))
 app.use(logger('tiny'))
 app.use(cors())
+app.use(express.static('build'))
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max))
