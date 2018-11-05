@@ -7,16 +7,11 @@ const Person = require('./models/person')
 
 app.use(bodyParser.json())
 
-logger.token('requestData', function(request, response) {return JSON.stringify(request.body)})
+logger.token('requestData', function (request, response) { return JSON.stringify(request.body) })
 app.use(logger(':method :url :status :requestData'))
 app.use(logger('tiny'))
 app.use(cors())
 app.use(express.static('build'))
-
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max))
-}
-
 
 app.get('/api', (req, res) => {
   res.send('<h1>Teretulemast tänne backendiin!</h1> <h2> sections: <ul> <li> info </li> <li> persons </li> </ul> </h2>')
@@ -24,13 +19,13 @@ app.get('/api', (req, res) => {
 
 app.get('/api/persons', (req, res) => {
   Person
-  .find({})
-  .then(persons => {
-    res.json(persons.map(Person.format))
-  })
-  .catch(error => {
-    console.log(error)
-  })
+    .find({})
+    .then(persons => {
+      res.json(persons.map(Person.format))
+    })
+    .catch(error => {
+      console.log(error)
+    })
 })
 
 app.get('/api/info', (req, res) => {
@@ -42,10 +37,10 @@ app.get('/api/info', (req, res) => {
       )
     })
     .catch(err => {
+      console.log(err)
       res.status(400).send()
     })
 })
-
 
 app.get('/api/persons/:id', (request, response) => {
   Person
@@ -59,10 +54,9 @@ app.get('/api/persons/:id', (request, response) => {
     })
     .catch(error => {
       console.log(error)
-      response.status(400).send({error : 'ei ole kunnollinen ID'})
+      response.status(400).send({ error: 'ei ole kunnollinen ID' })
     })
 })
-
 
 app.delete('/api/persons/:id', (request, response) => {
   Person
@@ -72,22 +66,20 @@ app.delete('/api/persons/:id', (request, response) => {
     })
     .catch(error => {
       console.log(error)
-      response.status(400).send({ error: 'ei ole kunnollinen ID'})
+      response.status(400).send({ error: 'ei ole kunnollinen ID' })
     })
 })
-
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
 
-
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
   console.log(body)
-  if (body.name === "" || body.number === "") {
+  if (body.name === '' || body.number === '') {
     return response.status(400).json({ error: 'Nimi tai numero puuttuu' })
   }
 
@@ -97,26 +89,25 @@ app.post('/api/persons', (request, response) => {
   })
 
   Person
-    .find({name: body.name})
+    .find({ name: body.name })
     .then(result => {
-      if(result.length > 0){
-        response.status(400).send({ error: 'Nimi on jo kannassa'})
-      }
-      else {
+      if (result.length > 0) {
+        response.status(400).send({ error: 'Nimi on jo kannassa' })
+      } else {
         person.save()
-        .then(savedPerson => {
-          response.json(Person.format(savedPerson))
-        })
-        .catch(error => {
-          console.log(error)
-        })
+          .then(savedPerson => {
+            response.json(Person.format(savedPerson))
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
     })
 })
 
 app.put('/api/persons/:id', (request, response) => {
   Person
-    .findOneAndUpdate({name: request.body.name}, request.body, {new: true})
+    .findOneAndUpdate({ name: request.body.name }, request.body, { new: true })
     .then(updatedPerson => {
       response.json(Person.format(updatedPerson))
     })
@@ -124,4 +115,4 @@ app.put('/api/persons/:id', (request, response) => {
       console.log(error)
       response.status(400).send({ error: 'ei ole kunnollinen ID' })
     })
-  })
+})
