@@ -21,7 +21,9 @@
   "dependencies": {
     "circular-json": "^0.5.9",
     "cors": "^2.8.4",
+    "dotenv": "^6.1.0",
     "express": "^4.16.4",
+    "for": "^0.1.0",
     "mongoose": "^5.3.9",
     "morgan": "^1.9.1"
   },
