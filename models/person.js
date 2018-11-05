@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const url = 'mongodb://Juuso:-----@ds145463.mlab.com:45463/section_3'
+const url = process.env.MONGODB_URI
 
 mongoose.connect(url, { useNewUrlParser: true })
 
