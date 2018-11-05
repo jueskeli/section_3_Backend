@@ -34,7 +34,7 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.get('/api/info', (req, res) => {
-  const count = Person
+  Person
     .countDocuments({})
     .then(count => {
       res.send(
@@ -96,24 +96,22 @@ app.post('/api/persons', (request, response) => {
     number: body.number
   })
 
-  //TODO: check if exists
-  found = false
-
-  if(found) {
-    console.log('person exists')
-    return response.status(400).json({error: 'Henkilö on jo lisätty luetteloon'})
-  }
-  else{
-    console.log('save')
-    person
-    .save()
-    .then(savedPerson => {
-      response.json(Person.format(savedPerson))
+  Person
+    .find({name: body.name})
+    .then(result => {
+      if(result.length > 0){
+        response.status(400).send({ error: 'Nimi on jo kannassa'})
+      }
+      else {
+        person.save()
+        .then(savedPerson => {
+          response.json(Person.format(savedPerson))
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      }
     })
-    .catch(error => {
-      console.log(error)
-    })
-  } 
 })
 
 app.put('/api/persons/:id', (request, response) => {
